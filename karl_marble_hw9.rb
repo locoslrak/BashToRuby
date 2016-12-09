@@ -1,15 +1,30 @@
 #!/usr/bin/env ruby
-
+##############################################################
+#
+#	Script to check file structure of own server for customer
+#	File repository, If present copy file to repository and 
+#	notify user of completion
+#	If directory structure not present build and populate
+#	sub directories
+#
+##############################################################
 require 'date'
 
 
+# Assign needed variables
+#
 commArgs = ARGV
 date = DateTime.now()
 timestamp = date.strftime('%F')
 month = date.strftime('%m')
 
 
-if ( commArgs[0] != "-c" && commArgs[2] != "-f" ) && ( commArgs[0] != "-f" && commArgs[2] != "-c" )
+# Check operators for correct usage.
+#
+if  commArgs[3] == nil
+	puts "Usage is karl_marble_hw9.rb [-c customerDataFolder] [-f dataFile]"
+	exit 1
+elsif ( commArgs[0] != "-c" && commArgs[2] != "-f" ) && ( commArgs[0] != "-f" && commArgs[2] != "-c" )
 	puts "Usage is karl_marble_hw9.rb [-c customerDataFolder] [-f dataFile]"
 	exit 1
 elsif ( commArgs[0] == "-h" || commArgs[0] == "--help" )
@@ -18,6 +33,8 @@ elsif ( commArgs[0] == "-h" || commArgs[0] == "--help" )
 end
 
 
+# Check destination directory tree. Test with either -f or -c as first operator.
+#
 if commArgs[0] == "-c"
 	puts = "Checking repository structure."
 
@@ -28,6 +45,8 @@ if commArgs[0] == "-c"
 		Dir.mkdir(commArgs[1])
 	end
 
+# Test subdirectories for completeness
+#
 	$i = 1
 
 	while $i < 13 do
@@ -50,6 +69,9 @@ if commArgs[0] == "-c"
 		end
 	end
 
+# Pull customer file via SCP and rename acorrding to following format:
+#	 filename.ext.YYYY-MM-DD
+#
 	folder = "#{commArgs[1]}"
 	newfile = "#{commArgs[3]}.#{timestamp}"
 	
@@ -61,6 +83,9 @@ if commArgs[0] == "-c"
 		puts "File did not successfully transfer."
 	end
 else
+
+# Check destination directory tree. Test with either -f or -c as first operator.
+#
 	Dir.chdir("/home/student/")
 	if Dir.exist?(commArgs[3]) == false
 		puts "Repository Root not found,"
@@ -68,6 +93,8 @@ else
 		Dir.mkdir(commArgs[3])
 	end
 
+# Test subdirectories for completeness
+#
 	$i = 1
 
 	while $i < 13 do
@@ -90,6 +117,9 @@ else
 		end
 	end
 
+# Pull customer file via SCP and rename acorrding to following format:
+#	 filename.ext.YYYY-MM-DD
+#
 	folder = "#{commArgs[3]}"
 	newfile = "#{commArgs[1]}.#{timestamp}"
 
