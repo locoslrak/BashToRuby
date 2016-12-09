@@ -1,8 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'date'
+
+
 commArgs = ARGV
-timestamp = `date +'%F'`
-month = `date +'%m'`
+date = DateTime.now()
+timestamp = date.strftime('%F')
+month = date.strftime('%m')
+
 
 if ( commArgs[0] != "-c" && commArgs[2] != "-f" ) && ( commArgs[0] != "-f" && commArgs[2] != "-c" )
 	puts "Usage is karl_marble_hw9.rb [-c customerDataFolder] [-f dataFile]"
@@ -12,7 +17,6 @@ elsif ( commArgs[0] == "-h" || commArgs[0] == "--help" )
 	exit 1
 end
 
-puts "#{commArgs}"
 
 if commArgs[0] == "-c"
 	puts = "Checking repository structure."
@@ -49,14 +53,10 @@ if commArgs[0] == "-c"
 	folder = "#{commArgs[1]}"
 	newfile = "#{commArgs[3]}.#{timestamp}"
 	
-	puts "#{commArgs}"
-	puts "#{newfile}"
-	puts "#{month}"
-
 	puts "Pulling file from customer server."
 	`scp km54218@icarus.cs.weber.edu:/home/hvalle/submit/cs3030/files/#{commArgs[3]} ~/#{folder}/#{month}/#{newfile}`
-	if File.exist? File.expand_path "~/#{folder}/#{month}/#{newfile}"
-		printf "File Transfered to ~/#{folder}/#{month}/#{newfile}"
+	if File.exist?(File.expand_path("~/#{folder}/#{month}/#{newfile}"))
+		puts "File Transfered to ~/#{folder}/#{month}/#{newfile}"
 	else
 		puts "File did not successfully transfer."
 	end
@@ -92,15 +92,11 @@ else
 
 	folder = "#{commArgs[3]}"
 	newfile = "#{commArgs[1]}.#{timestamp}"
-	
-	puts "#{newfile}"
-	puts "#{month}"
-	puts "#{commArgs}"
 
 	puts "Pulling file from customer server."
 	`scp km54218@icarus.cs.weber.edu:/home/hvalle/submit/cs3030/files/#{commArgs[1]} ~/#{folder}/#{month}/#{newfile}`
-	if File.exist? File.expand_path "~/#{folder}/#{month}/#{newfile}"
-		printf "File Transfered to ~/#{folder}/#{month}/#{newfile}"
+	if File.exist?(File.expand_path("~/#{folder}/#{month}/#{newfile}"))
+		puts "File Transfered to ~/#{folder}/#{month}/#{newfile}"
 	else
 		puts "File did not successfully transfer."
 	end
